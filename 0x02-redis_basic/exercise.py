@@ -2,7 +2,7 @@
 """ Random task assigned by alx"""
 import redis
 import uuid
-from typing import Union
+from typing import Union, Optional, Callable
 
 
 class Cache():
@@ -23,3 +23,27 @@ class Cache():
         id = str(uuid.uuid4())
         self._redis.set(id, data)
         return id
+
+    def get(self, key, fn: Optional[Callable]) -> Union[int,
+                                                        bytes, str, float]:
+        """ take a key string argument and an optional Callable argument named
+            fn. This callable will be used to convert the data back to the
+            desired format """
+        data = self._redis.get(key)
+        if fn:
+            return fn(data)
+        return data
+
+    def get_str(self, key):
+        """ automatically parametrize Cache.get to str """
+        data = self._redis.get(key).decode('utf-8')
+        return data
+
+    def get_int(self, key):
+        """ automatically parametrize Cache.get to int """
+        data = self._redis.get(key)
+        try:
+            data = int(value.decode("utf-8"))
+        except Exception:
+            data = 0
+        return data
