@@ -37,7 +37,7 @@ class Cache():
         self._redis.set(id, data)
         return id
 
-    def get(self, key, fn: Optional[Callable]) -> Union[int,
+    def get(self, key, fn: Optional[Callable] = None) -> Union[int,
                                                         bytes, str, float]:
         """ take a key string argument and an optional Callable argument named
             fn. This callable will be used to convert the data back to the
